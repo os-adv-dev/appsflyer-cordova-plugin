@@ -51,14 +51,19 @@
             <uses-permission android:name="android.permission.INTERNET"/>
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
             <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
-            <meta-data android:name="CHANNEL" android:value="GooglePlay"/>
         </config-file>
+
         <config-file target="AndroidManifest.xml" parent="/*/application">
             <receiver android:name="com.appsflyer.MultipleInstallBroadcastReceiver" android:exported="true">
                 <intent-filter>
                     <action android:name="com.android.vending.INSTALL_REFERRER"/>
                 </intent-filter>
             </receiver>
+        </config-file>
+
+      <!-- Add meta-data to AndroidManifest.xml -->
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <meta-data android:name="CHANNEL" android:value="GooglePlay"/>
         </config-file>
 
         <source-file src="src/android/com/appsflyer/cordova/plugin/AppsFlyerPlugin.java"
