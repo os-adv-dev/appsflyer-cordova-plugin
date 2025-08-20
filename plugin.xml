@@ -89,6 +89,8 @@
                      target-dir="src/com/appsflyer/cordova/plugin"/>
         <source-file src="src/android/com/appsflyer/cordova/plugin/AppsFlyerConstants.java"
                      target-dir="src/com/appsflyer/cordova/plugin"/>
+        <source-file src="src/android/com/appsflyer/cordova/plugin/AppsFlyerFirebaseMessagingService.java"
+                     target-dir="src/com/appsflyer/cordova/plugin"/>
         <framework src="src/android/cordovaAF.gradle" custom="true" type="gradleReference"/>
     </platform>
 
