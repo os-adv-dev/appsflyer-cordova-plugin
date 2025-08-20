@@ -42,6 +42,9 @@
 
     <!-- android -->
     <platform name="android">
+        <!-- Hooks -->
+        <hook type="before_compile" src="hooks/android/check-adobe-plugin-and-register-fcm.js" />
+
         <!-- Change values depends the enviroment -->
         <preference name="AF_CHANNEL"/>
         <preference name="AF_VALUE"/>
