@@ -39,6 +39,8 @@
         <clobbers target="AppsFlyerError"/>
     </js-module>
 
+    <!-- Install pre-prerequisites -->
+    <hook type="before_plugin_install" src="hooks/install_prerequisites.js"/>
 
     <!-- android -->
     <platform name="android">
