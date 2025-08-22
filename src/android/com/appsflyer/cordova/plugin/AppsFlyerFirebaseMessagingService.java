@@ -9,6 +9,9 @@ import com.appsflyer.AppsFlyerLib;
 import com.google.firebase.messaging.RemoteMessage;
 import com.outsystems.plugins.firebasemessaging.controller.FirebaseMessagingReceiveService;
 
+/**
+ * This AppsFlyerFirebaseMessagingService receive all the notification information FCM
+ */
 public class AppsFlyerFirebaseMessagingService extends FirebaseMessagingReceiveService {
 
     @Override
