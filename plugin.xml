@@ -48,7 +48,7 @@
         <hook type="before_compile" src="hooks/android/check-adobe-plugin-and-register-fcm.js" />
 
         <!-- Change values depends the enviroment -->
-        <preference name="AF_CHANNEL"/>
+       <preference name="AF_CHANNEL"/>
         <preference name="AF_VALUE"/>
         <preference name="AF_HOST"/>
         <preference name="AF_SCHEME"/>
@@ -96,9 +96,14 @@
         <framework src="src/android/cordovaAF.gradle" custom="true" type="gradleReference"/>
     </platform>
 
-
     <!-- ios -->
     <platform name="ios">
+        <!-- Hooks -->
+        <hook type="before_compile" src="hooks/ios/check-adobe-plugin.js" />
+
+        <preference name="deployment-target" value="12.0" default="12.0"/>
+        <preference name="UseSwiftLanguageVersion" value="5" default="5"/>
+
         <config-file target="config.xml" parent="/*">
             <feature name="AppsFlyerPlugin">
                 <param name="ios-package" value="AppsFlyerPlugin"/>
@@ -116,6 +121,10 @@
         <header-file src="src/ios/AppsFlyerShareInviteHelper.h"/>
         <header-file src="src/ios/AppsFlyerX+AppController.h"/>
         <source-file src="src/ios/AppsFlyerX+AppController.m"/>
+
+        <header-file src="src/ios/AppDelegate+AppsFlyer.h" />
+        <source-file src="src/ios/AppDelegate+AppsFlyer.m" />
+
         <podspec>
             <config>
             </config>
