@@ -1,4 +1,5 @@
 #import "AppDelegate+AppsFlyer.h"
+#import "OutSystems-Swift.h"
 #import <objc/runtime.h>
 #import <OSFirebaseMessagingLib/OSFirebaseMessagingLib-Swift.h>
 #import <UserNotifications/UserNotifications.h>
