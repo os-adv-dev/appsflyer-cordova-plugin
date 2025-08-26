@@ -33,7 +33,7 @@ module.exports = function (context) {
     console.log('✅ ---- adobe is not present ----');
 
     // Executa hook que comenta AppDelegate original
-    const commentHook = path.join(context.opts.plugin.dir, 'hooks', 'comment_objc_class.js');
+    const commentHook = path.join(context.opts.plugin.dir, 'hooks', 'ios', 'comment_objc_class.js');
     require(commentHook)(context);
   }
 };
