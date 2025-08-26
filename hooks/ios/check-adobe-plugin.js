@@ -6,19 +6,18 @@ module.exports = function (context) {
   const appName = fs.readdirSync(iosPath).find(f => f.endsWith('.xcodeproj'))?.replace('.xcodeproj', '');
   if (!appName) return;
 
+  const pluginIdToCheck = 'cordova-adobe-plugin';
   const pluginsPath = path.join(iosPath, 'Plugins');
-  const adobePath = path.join(pluginsPath, 'cordova-plugin-adobe-sdk', 'AppDelegate+Adobe.m');
+  const adobePath = path.join(pluginsPath, pluginIdToCheck, 'AppDelegate+Adobe.m');
   const appsflyerM = path.join(iosPath, appName, 'AppDelegate+AppsFlyer.m');
 
   if (fs.existsSync(adobePath)) {
-    console.log('✅ ---- adobe is present ----');
+    console.log('✅ ---- Cordova Adobe Plugin is present in the App ----');
 
-    // Comenta todo AppDelegate+AppsFlyer.m
     let content = fs.readFileSync(appsflyerM, 'utf8');
     content = content.split('\n').map(line => `// ${line}`).join('\n');
     fs.writeFileSync(appsflyerM, content, 'utf8');
 
-    // Adiciona chamada ao Adobe
     let adobeContent = fs.readFileSync(adobePath, 'utf8');
     if (!adobeContent.includes('[AppsFlyerLib shared]')) {
       adobeContent = adobeContent.replace(
@@ -30,9 +29,8 @@ module.exports = function (context) {
     }
 
   } else {
-    console.log('✅ ---- adobe is not present ----');
+    console.log('✅ ---- Cordova Adobe Plugin is NOT present in the App----');
 
-    // Executa hook que comenta AppDelegate original
     const commentHook = path.join(context.opts.plugin.dir, 'hooks', 'ios', 'comment_objc_class.js');
     require(commentHook)(context);
   }
