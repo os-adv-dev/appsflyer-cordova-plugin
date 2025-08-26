@@ -11,6 +11,8 @@ module.exports = function (context) {
   const appsflyerM = path.join(iosPath, appName, 'AppDelegate+AppsFlyer.m');
 
   if (fs.existsSync(adobePath)) {
+    console.log('✅ ---- adobe is present ----');
+
     // Comenta todo AppDelegate+AppsFlyer.m
     let content = fs.readFileSync(appsflyerM, 'utf8');
     content = content.split('\n').map(line => `// ${line}`).join('\n');
@@ -28,6 +30,8 @@ module.exports = function (context) {
     }
 
   } else {
+    console.log('✅ ---- adobe is not present ----');
+
     // Executa hook que comenta AppDelegate original
     const commentHook = path.join(context.opts.plugin.dir, 'hooks', 'comment_objc_class.js');
     require(commentHook)(context);
