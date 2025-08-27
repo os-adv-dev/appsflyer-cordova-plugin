@@ -100,11 +100,9 @@
     <platform name="ios">
         <!-- Hooks -->
         <preference name="IOS_SKAN_POSTBACK"/>
-        <preference name="IOS_SCHEME_ONE_LINK"/>
         <preference name="IOS_ONE_LINK_ASSOCIATED_DOMAIN"/>
     
         <hook type="before_compile" src="hooks/ios/check-adobe-plugin.js" />
-        <hook type="before_compile" src="hooks/ios/add-url-scheme-if-missing.js" />
 
         <preference name="deployment-target" value="12.0" default="12.0"/>
         <preference name="UseSwiftLanguageVersion" value="5" default="5"/>
@@ -150,20 +148,6 @@
                 <string>whatsapp</string>
             </array>
         </config-file>
-
-        <!-- OneLink Deep Link Scheme -->
-       <!-- <edit-config file="*-Info.plist" mode="merge" target="CFBundleURLTypes">
-            <array>
-                <dict>
-                    <key>CFBundleURLName</key>
-                    <string>onelink</string>
-                    <key>CFBundleURLSchemes</key>
-                    <array>
-                        <string>$IOS_SCHEME_ONE_LINK</string>
-                    </array>
-                </dict>
-            </array>
-        </edit-config>-->
 
         <!-- Associate Domains -->
          <edit-config file="**/Entitlements-Debug.plist" mode="merge" target="com.apple.developer.associated-domains">
