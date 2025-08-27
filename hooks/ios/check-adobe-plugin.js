@@ -30,26 +30,37 @@ function commentAppsFlyerFiles(appsFlyerPathM, appsFlyerPathH) {
 }
 
 function injectAppsFlyerUninstall(adobePath) {
+  let content = fs.readFileSync(adobePath, 'utf8');
+  let modified = false;
+
   const uninstallLine = '[[AppsFlyerLib shared] registerUninstall:deviceToken];';
+  const pushIdLine = '[AEPMobileCore setPushIdentifier: deviceToken];';
 
-  let adobeContent = fs.readFileSync(adobePath, 'utf8');
-
-  if (adobeContent.includes(uninstallLine)) {
-    console.log('ℹ️ AppsFlyer uninstall line already present in Adobe delegate.');
-    return;
+  // ✅ Step 1: Inject #import if missing
+  const importLine = '#import <AppsFlyerLib/AppsFlyerLib.h>';
+  if (!content.includes(importLine)) {
+    content = importLine + '\n' + content;
+    modified = true;
+    console.log('✅ Injected AppsFlyer #import');
   }
 
-  const methodRegex = /- \(void\)application:\(UIApplication \*\)application didRegisterForRemoteNotificationsWithDeviceToken:\(NSData \*\)deviceToken \{([\s\S]*?)\n\}/;
-
-  const match = adobeContent.match(methodRegex);
-  if (match) {
-    const methodBody = match[1];
-    const newBody = methodBody + `\n    ${uninstallLine}`;
-    adobeContent = adobeContent.replace(methodBody, newBody);
-    fs.writeFileSync(adobePath, adobeContent, 'utf8');
-    console.log('✅ Injected AppsFlyer uninstall registration into Adobe delegate.');
+  // ✅ Step 2: Inject uninstall line after pushIdentifier
+  if (!content.includes(uninstallLine) && content.includes(pushIdLine)) {
+    content = content.replace(
+      pushIdLine,
+      `${pushIdLine}\n    ${uninstallLine}`
+    );
+    modified = true;
+    console.log('✅ Injected AppsFlyer registerUninstall line');
+  } else if (content.includes(uninstallLine)) {
+    console.log('ℹ️ AppsFlyer uninstall line already present.');
   } else {
-    console.warn('⚠️ Could not find the method didRegisterForRemoteNotificationsWithDeviceToken in Adobe delegate.');
+    console.warn('⚠️ Could not find [AEPMobileCore setPushIdentifier: deviceToken]; to inject after.');
+  }
+
+  if (modified) {
+    fs.writeFileSync(adobePath, content, 'utf8');
+    console.log('✅ Adobe file updated successfully.');
   }
 }
 
@@ -57,24 +68,36 @@ module.exports = function (context) {
   const projectRoot = context.opts.projectRoot;
   const projectName = getProjectName(projectRoot);
   const iosPath = path.join(projectRoot, 'platforms', 'ios');
-  const appsflyerM = path.join(iosPath, projectName, 'AppDelegate+AppsFlyer.m');
-  const appsflyerH = path.join(iosPath, projectName, 'AppDelegate+AppsFlyer.h');
+  const appsflyerM = path.join(
+    iosPath,
+    projectName,
+    'Plugins',
+    'cordova-plugin-appsflyer-sdk',
+    'AppDelegate+AppsFlyer.m'
+  );
 
-  const pluginIdToCheck = 'cordova-adobe-plugin';
-  const adobePath = path.join(projectRoot, 'plugins', pluginIdToCheck, 'src', 'ios', 'AppDelegate+Adobe.m');
+  const appsflyerH = path.join(
+    iosPath,
+    projectName,
+    'Plugins',
+    'cordova-plugin-appsflyer-sdk',
+    'AppDelegate+AppsFlyer.h'
+  );
+
+  const adobePath = path.join(
+    iosPath,
+    projectName,
+    'Plugins',
+    'cordova-adobe-plugin',
+    'AppDelegate+Adobe.m'
+  );
 
   if (fs.existsSync(adobePath)) {
     console.log('✅ Cordova Adobe Plugin is present. Proceeding...');
-
-    // ✅ 1. Comment both .m and .h files of AppsFlyer
     commentAppsFlyerFiles(appsflyerM, appsflyerH);
-
-    // ✅ 2. Inject uninstall tracking in AppDelegate+Adobe.m
     injectAppsFlyerUninstall(adobePath);
-
   } else {
     console.log('❌ Cordova Adobe Plugin is NOT present. Running fallback hook.');
-
     const fallbackHook = path.join(context.opts.plugin.dir, 'hooks', 'ios', 'comment_objc_class.js');
     if (fs.existsSync(fallbackHook)) {
       require(fallbackHook)(context);

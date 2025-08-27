@@ -101,7 +101,7 @@
         <!-- Hooks -->
         <preference name="SKAN_POSTBACK"/>
         <preference name="SCHEME_ONE_LINK"/>
-        
+    
         <hook type="before_compile" src="hooks/ios/check-adobe-plugin.js" />
 
         <preference name="deployment-target" value="12.0" default="12.0"/>
