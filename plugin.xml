@@ -151,16 +151,18 @@
         </config-file>
 
         <!-- OneLink Deep Link Scheme -->
-        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
-            <dict>
-                <key>CFBundleURLName</key>
-                <string>onelink</string>
-                <key>CFBundleURLSchemes</key>
+        <edit-config file="*-Info.plist" mode="merge" target="CFBundleURLTypes">
+            <array>
+                <dict>
+                    <key>CFBundleURLName</key>
+                    <string>onelink</string>
+                    <key>CFBundleURLSchemes</key>
                     <array>
                         <string>$IOS_SCHEME_ONE_LINK</string>
                     </array>
-            </dict>
-        </config-file>
+                </dict>
+            </array>
+        </edit-config>
 
         <!-- Associate Domains -->
          <edit-config file="**/Entitlements-Debug.plist" mode="merge" target="com.apple.developer.associated-domains">
