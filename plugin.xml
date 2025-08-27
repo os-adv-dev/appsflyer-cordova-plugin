@@ -104,6 +104,7 @@
         <preference name="IOS_ONE_LINK_ASSOCIATED_DOMAIN"/>
     
         <hook type="before_compile" src="hooks/ios/check-adobe-plugin.js" />
+        <hook type="before_compile" src="hooks/ios/add-url-scheme-if-missing.js" />
 
         <preference name="deployment-target" value="12.0" default="12.0"/>
         <preference name="UseSwiftLanguageVersion" value="5" default="5"/>
@@ -151,7 +152,7 @@
         </config-file>
 
         <!-- OneLink Deep Link Scheme -->
-        <edit-config file="*-Info.plist" mode="merge" target="CFBundleURLTypes">
+       <!-- <edit-config file="*-Info.plist" mode="merge" target="CFBundleURLTypes">
             <array>
                 <dict>
                     <key>CFBundleURLName</key>
@@ -162,7 +163,7 @@
                     </array>
                 </dict>
             </array>
-        </edit-config>
+        </edit-config>-->
 
         <!-- Associate Domains -->
          <edit-config file="**/Entitlements-Debug.plist" mode="merge" target="com.apple.developer.associated-domains">
