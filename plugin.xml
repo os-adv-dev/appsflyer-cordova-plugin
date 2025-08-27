@@ -48,10 +48,10 @@
         <hook type="before_compile" src="hooks/android/check-adobe-plugin-and-register-fcm.js" />
 
         <!-- Change values depends the enviroment -->
-        <preference name="AF_CHANNEL"/>
-        <preference name="AF_VALUE"/>
-        <preference name="AF_HOST"/>
-        <preference name="AF_SCHEME"/>
+        <preference name="ANDROID_AF_CHANNEL"/>
+        <preference name="ANDROID_AF_VALUE"/>
+        <preference name="ANDROID_AF_HOST"/>
+        <preference name="ANDROID_AF_SCHEME"/>
 
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="AppsFlyerPlugin">
@@ -74,7 +74,7 @@
 
         <!-- Add meta-data to AndroidManifest.xml -->
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <meta-data android:name="$AF_CHANNEL" android:value="$AF_VALUE"/>
+            <meta-data android:name="$ANDROID_AF_CHANNEL" android:value="$ANDROID_AF_VALUE"/>
         </config-file>
 
         <!-- Add dinamic intent-filter -->
@@ -83,7 +83,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:host="$AF_HOST" android:scheme="$AF_SCHEME" />
+                <data android:host="$ANDROID_AF_HOST" android:scheme="$ANDROID_AF_SCHEME" />
             </intent-filter>
         </config-file>
 
@@ -99,8 +99,9 @@
     <!-- ios -->
     <platform name="ios">
         <!-- Hooks -->
-        <preference name="SKAN_POSTBACK"/>
-        <preference name="SCHEME_ONE_LINK"/>
+        <preference name="IOS_SKAN_POSTBACK"/>
+        <preference name="IOS_SCHEME_ONE_LINK"/>
+        <preference name="IOS_ONE_LINK_ASSOCIATED_DOMAIN"/>
     
         <hook type="before_compile" src="hooks/ios/check-adobe-plugin.js" />
 
@@ -138,30 +139,40 @@
 
         <!-- SKAN Postback -->
         <config-file target="*-Info.plist" parent="NSAdvertisingAttributionReportEndpoint">
-            <string>$SKAN_POSTBACK</string>
+            <string>$IOS_SKAN_POSTBACK</string>
         </config-file>
 
         <!-- LSApplicationQueriesSchemes -->
         <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
             <array>
-            <string>twitter</string>
-            <string>whatsapp</string>
+                <string>twitter</string>
+                <string>whatsapp</string>
             </array>
         </config-file>
 
         <!-- OneLink Deep Link Scheme -->
         <config-file target="*-Info.plist" parent="CFBundleURLTypes">
-            <array>
             <dict>
                 <key>CFBundleURLName</key>
                 <string>onelink</string>
                 <key>CFBundleURLSchemes</key>
-                <array>
-                <string>$SCHEME_ONE_LINK</string>
-                </array>
+                    <array>
+                        <string>$IOS_SCHEME_ONE_LINK</string>
+                    </array>
             </dict>
-            </array>
         </config-file>
+
+        <!-- Associate Domains -->
+         <edit-config file="**/Entitlements-Debug.plist" mode="merge" target="com.apple.developer.associated-domains">
+            <array>
+                <string>applinks:$IOS_ONE_LINK_ASSOCIATED_DOMAIN</string>
+            </array>
+        </edit-config>
+        <edit-config file="**/Entitlements-Release.plist" mode="merge" target="com.apple.developer.associated-domains">
+            <array>
+                <string>applinks:$IOS_ONE_LINK_ASSOCIATED_DOMAIN</string>
+            </array>
+        </edit-config>
 
     </platform>
 
